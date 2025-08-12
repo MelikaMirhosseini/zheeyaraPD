@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ژیارا: پیچ دک تعاملی | Zheeyara: Interactive Pitch Deck</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="ژیارا یک پلتفرم یکپارچه سلامت و اجتماعی برای سالمندان در ایران و منطقه MENA است که با هدف پیری سالم و زندگی معنادار طراحی شده است.">
+    <meta name="keywords" content="ژیارا, مراقبت از سالمندان, سلامت دیجیتال, اقتصاد طول عمر, استارتاپ, ایران, MENA, Zheeyara, Elder Care, Healthtech">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF6; /* Off-white */
+            color: #2C3E50; /* Deep Navy */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            aspect-ratio: 16 / 9;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #E8A87C; /* Warm Peach */
+        }
+        .nav-link.active {
+            color: #E8A87C;
+            border-bottom-color: #E8A87C;
+        }
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-button {
+            background-color: #f0f0f0;
+            color: #2C3E50;
+            white-space: nowrap;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .tab-button:hover {
+            background-color: #e8e8e8;
+        }
+        .tab-button.active {
+            background-color: #41B3A3; /* Calming Teal */
+            color: white;
+        }
+        .roadmap-item .roadmap-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+        .roadmap-item.active .roadmap-content {
+            max-height: 500px;
+            opacity: 1;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .competitor-quadrant {
+            transition: background-color 0.3s ease;
+        }
+        .competitor-quadrant:hover {
+            background-color: rgba(65, 179, 163, 0.1);
+        }
+        #mobile-menu {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 0;
+            opacity: 0;
+        }
+        #mobile-menu.open {
+            max-height: 500px; /* A large enough value */
+            opacity: 1;
+        }
+        
+        /* Responsive Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: right;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        html[dir="ltr"] th, html[dir="ltr"] td {
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        @media screen and (max-width: 768px) {
+            table thead {
+                display: none;
+            }
+            table, table tbody, table tr, table td {
+                display: block;
+                width: 100%;
+            }
+            table tr {
+                margin-bottom: 1rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+            table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            html[dir="ltr"] table td {
+                text-align: left;
+                padding-left: 1rem;
+                padding-right: 50%;
+            }
+            table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 1rem;
+                font-weight: 600;
+                text-align: left;
+                white-space: nowrap;
+            }
+            html[dir="ltr"] table td:before {
+                right: 0;
+                left: auto;
+                padding-left: 0;
+                padding-right: 1rem;
+                text-align: right;
+            }
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<b<body class="antialiased" onload="updateContent('fa')">
+
+    >
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-[#2C3E50]" data-key="brandName">ژیارا</h1>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex space-x-8">
+                    <a href="#opportunity" class="nav-link text-gray-600 border-b-2 border-transparent pb-1" data-key="navOpportunity">فرصت</a>
+                    <a href="#solution" class="nav-link text-gray-600 border-b-2 border-transparent pb-1" data-key="navSolution">راه‌حل ما</a>
+                    <a href="#business" class="nav-link text-gray-600 border-b-2 border-transparent pb-1" data-key="navBusiness">مدل کسب‌وکار</a>
+                    <a href="#impact" class="nav-link text-gray-600 border-b-2 border-transparent pb-1" data-key="navImpact">تأثیر ما</a>
+                    <a href="#team" class="nav-link text-gray-600 border-b-2 border-transparent pb-1" data-key="navFounder">بنیان‌گذار</a>
+                    <a href="#partnership" class="nav-link text-white px-4 py-2 rounded-full font-semibold bg-[#E8A87C] hover:bg-[#D4906F]" data-key="navPartnership">همکاری</a>
+                </div>
+                <!-- Language Switcher -->
+                <div class="flex space-x-2">
+                    <button id="lang-fa" aria-label="تغییر زبان به فارسی" class="px-3 py-1 rounded-full text-sm font-semibold bg-[#41B3A3] text-white">فارسی</button>
+                    <button id="lang-en" aria-label="Switch language to English" class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-[#2C3E50]">English</button>
+                </div>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-2xl text-[#2C3E50]" aria-label="باز کردن منو">☰</button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-white px-6 pb-4 overflow-hidden">
+            <a href="#opportunity" class="block py-2 nav-link text-gray-600" data-key="navOpportunity">فرصت</a>
+            <a href="#solution" class="block py-2 nav-link text-gray-600" data-key="navSolution">راه‌حل ما</a>
+            <a href="#business" class="block py-2 nav-link text-gray-600" data-key="navBusiness">مدل کسب‌وکار</a>
+            <a href="#impact" class="block py-2 nav-link text-gray-600" data-key="navImpact">تأثیر ما</a>
+            <a href="#team" class="block py-2 nav-link text-gray-600" data-key="navFounder">بنیان‌گذار</a>
+            <a href="#partnership" class="block py-2 nav-link text-gray-600" data-key="navPartnership">همکاری</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 md:py-32 text-center bg-gradient-to-br from-[#FDFBF6] to-[#fceee2]">
+            <div class="container mx-auto px-6 max-w-7xl">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-[#2C3E50] mb-4" data-key="heroTitle">پیری سالم، زندگی بامعنا</h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12" data-key="heroSubtitle">پلتفرم یکپارچه سلامت + اجتماعی برای سالمندان در ایران و منطقه MENA</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                    <div class="stat-card bg-white p-6 rounded-xl shadow-md">
+                        <p class="text-sm text-gray-500" data-key="statIranMarket">بازار سالمندان ایران (۲۰۲۵)</p>
+                        <p class="text-3xl font-bold text-[#41B3A3]">$6B+</p>
+                    </div>
+                    <div class="stat-card bg-white p-6 rounded-xl shadow-md">
+                        <p class="text-sm text-gray-500" data-key="statGlobalEconomy">اقتصاد طول عمر جهانی (۲۰۳۰)</p>
+                        <p class="text-3xl font-bold text-[#41B3A3]" data-key="statGlobalEconomyValue">$15 تریلیون</p>
+                    </div>
+                    <div class="stat-card bg-white p-6 rounded-xl shadow-md">
+                        <p class="text-sm text-gray-500" data-key="statMenamarket">بازار سالمندان MENA</p>
+                        <p class="text-3xl font-bold text-[#41B3A3]" data-key="statMenaMarketValue">$500 میلیارد</p>
+                    </div>
+                    <div class="stat-card bg-[#E8A87C] text-white p-6 rounded-xl shadow-lg">
+                        <p class="text-sm opacity-80" data-key="statOpportunity">فرصت پیشرو بودن در بازار</p>
+                        <p class="text-3xl font-bold" data-key="statUnrivaled">بی‌نظیر</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Opportunity Section -->
+        <section id="opportunity" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="opportunityTitle">سکوت رو به رشد و فرصت بزرگ</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="opportunitySubtitle">این بخش چالش‌های حیاتی اجتماعی پیش روی جمعیت سالمند رو به رشد ایران و فرصت عظیم و دست‌نخورده اقتصادی را که از طریق ارائه یک راه‌حل مدرن و مقیاس‌پذیر در منطقه و جهان پدید می‌آید، تشریح می‌کند.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-center md:text-right" data-key="problemTitle">مشکل: بحران در مراقبت از سالمندان</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4 flex-row-reverse text-right">
+                                <div class="text-3xl text-[#E8A87C]">📈</div>
+                                <div>
+                                    <h4 class="font-semibold text-lg" data-key="problemAgingTitle">پیری سریع جمعیت و محرومیت دیجیتال</h4>
+                                    <p class="text-gray-600 leading-relaxed" data-key="problemAgingText">جمعیت سالمند ایران از ۱۰ میلیون نفر (۱۴%) تا سال ۱۴۱۰ به ۲۰% خواهد رسید. نکته مهم اینجاست که ۷۰% آنها فاقد مهارت‌های دیجیتال هستند که مانع بزرگی برای دسترسی به خدمات نوین سلامت ایجاد می‌کند.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4 flex-row-reverse text-right">
+                                <div class="text-3xl text-[#E8A87C]">😔</div>
+                                <div>
+                                    <h4 class="font-semibold text-lg" data-key="problemLonelinessTitle">تنهایی و تأثیرات مخرب بر سلامت</h4>
+                                    <p class="text-gray-600 leading-relaxed" data-key="problemLonelinessText">انزوای اجتماعی و محدودیت‌های حرکتی باعث افزایش بیماری‌های مزمن، افسردگی و کاهش طول عمر می‌شود. سازمان بهداشت جهانی (WHO) ریسک سلامتی تنهایی را معادل کشیدن ۱۵ سیگار در روز می‌داند.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4 flex-row-reverse text-right">
+                                <div class="text-3xl text-[#E8A87C]">💸</div>
+                                <div>
+                                    <h4 class="font-semibold text-lg" data-key="problemCostsTitle">هزینه‌های گزاف قابل پیشگیری</h4>
+                                    <p class="text-gray-600 leading-relaxed" data-key="problemCostsText">قرارهای پزشکی از دست رفته و سوءمدیریت داروها منجر به میلیاردها دلار هزینه بستری سالانه می‌شود که بار مستقیمی بر سیستم‌های درمانی و خانواده‌هاست.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-center md:text-right" data-key="opportunityStrategicTitle">فرصت استراتژیک: بازاری چند میلیارد دلاری در انتظار</h3>
+                        <div class="bg-gray-50 p-6 rounded-xl shadow-inner h-full">
+                            <p class="text-gray-700 text-lg mb-4 leading-relaxed" data-key="opportunityStrategicText1">بازار سالمندان در ایران و منطقه وسیع‌تر MENA یک <strong class="text-[#41B3A3]">فرصت صدها میلیارد دلاری</strong> است که به شدت کم‌خدمات‌رسانی شده و بسیار پراکنده است. این وضعیت، نقطه ورود جذابی را برای یک راه‌حل یکپارچه مانند ژیارا ایجاد می‌کند.</p>
+                            <p class="text-gray-700 text-lg mb-4 font-semibold leading-relaxed" data-key="opportunityStrategicText2">چرا اکنون لحظه‌ای حیاتی است:</p>
+                                <ul class="list-disc list-inside text-gray-600 mr-4 space-y-2">
+                                    <li data-key="opportunityDemographic"><strong class="text-[#2C3E50]">سونامی جمعیتی:</strong> تغییر بی‌سابقه و سریع به سمت جمعیت‌های سالمند، تقاضای فوری ایجاد کرده است.</li>
+                                    <li data-key="opportunityDigital"><strong class="text-[#2C3E50]">آمادگی دیجیتال:</strong> افزایش نفوذ موبایل و اینترنت در میان سالمندان و خانواده‌هایشان، امکان پذیرش فناوری را فراهم می‌کند.</li>
+                                    <li data-key="opportunityVacuum"><strong class="text-[#2C3E50]">خلأ یکپارچگی:</strong> فقدان کامل یک پلتفرم یکپارچه و سالمندپسند در ایران و MENA، مزیت پیشرو بودن را فراهم می‌کند.</li>
+                                    <li data-key="opportunityGlobal"><strong class="text-[#2C3E50]">موج جهانی طول عمر:</strong> بهره‌برداری از اقتصاد جهانی طول عمر که تا سال ۲۰۳۰ به ۱۵ تریلیون دلار می‌رسد.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-bold mb-6 text-center" data-key="marketSizeTitle">اندازه بازار و جمعیت‌شناسی</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 text-center md:text-right" data-key="marketSizeTableTitle">اندازه بازار (میلیارد دلار)</h4>
+                            <div class="bg-white p-4 rounded-xl shadow overflow-x-auto">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="whitespace-nowrap" data-key="marketTableHeader1">بخش</th>
+                                            <th class="whitespace-nowrap" data-key="marketTableHeader2">منطقه</th>
+                                            <th class="whitespace-nowrap" data-key="marketTableHeader3">ارزش ۲۰۲۵</th>
+                                            <th class="whitespace-nowrap" data-key="marketTableHeader4">رشد مرکب سالانه (۲۰۲۵–۲۰۳۰)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-key="marketRow1Col1">کل بازار قابل دستیابی (TAM) – اقتصاد طول عمر</td>
+                                            <td data-key="marketRow1Col2">جهانی</td>
+                                            <td>$15,000B</td>
+                                            <td>6.5%</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-key="marketRow2Col1">بازار قابل ارائه (SAM) – خدمات سلامت و اجتماعی سالمندان</td>
+                                            <td data-key="marketRow2Col2">MENA</td>
+                                            <td>$500B</td>
+                                            <td>5.8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-key="marketRow3Col1">بازار قابل دستیابی عملیاتی (SOM) – سالمندان در ایران</td>
+                                            <td data-key="marketRow3Col2">ایران</td>
+                                            <td>$6B</td>
+                                            <td>4.2%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 text-center md:text-right" data-key="demographicsTableTitle">جمعیت‌شناسی و روندهای رشد (ایران)</h4>
+                            <div class="bg-white p-4 rounded-xl shadow overflow-x-auto">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="whitespace-nowrap" data-key="demographicsTableHeader1">معیار</th>
+                                            <th class="whitespace-nowrap" data-key="demographicsTableHeader2">ایران ۲۰۲۵</th>
+                                            <th class="whitespace-nowrap" data-key="demographicsTableHeader3">ایران ۲۰۳۰</th>
+                                            <th class="whitespace-nowrap" data-key="demographicsTableHeader4">توضیحات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-key="demographicsRow1Col1">جمعیت ۶۰+ سال</td>
+                                            <td data-key="demographicsRow1Col2">۱۰M (۱۴%)</td>
+                                            <td data-key="demographicsRow1Col3">۱۴M (۲۰%)</td>
+                                            <td data-key="demographicsRow1Col4">سریعترین رشد در MENA</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-key="demographicsRow2Col1">نفوذ گوشی هوشمند در ۶۰+</td>
+                                            <td data-key="demographicsRow2Col2">۴۵%</td>
+                                            <td data-key="demographicsRow2Col3">۶۵%</td>
+                                            <td data-key="demographicsRow2Col4">افزایش سواد دیجیتال</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-key="demographicsRow3Col1">میانگین هزینه ماهانه سلامت هر سالمند</td>
+                                            <td data-key="demographicsRow3Col2">$50</td>
+                                            <td data-key="demographicsRow3Col3">$70</td>
+                                            <td data-key="demographicsRow3Col4">هزینه‌های خصوصی + عمومی</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Solution Section -->
+        <section id="solution" class="py-16 md:py-24 bg-[#FDFBF6]">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="solutionTitle">راه‌حل ما: اکوسیستم ژیارا</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="solutionSubtitle">ژیارا <strong class="text-[#41B3A3]">پل ارتباطی جامع</strong> است که سالمندان را به خدمات حیاتی سلامت و اجتماعی متصل می‌کند. اکوسیستم مبتنی بر هوش مصنوعی ما برای حداکثر دسترسی طراحی شده است و با فناوری‌های نوآورانه و لمس انسانی دلسوزانه، عزت، ارتباط و استقلال توانمند را تقویت می‌کند. پیشنهادات یکپارچه ما را کاوش کنید:</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-12">
+                    <button class="tab-button p-4 rounded-lg font-semibold transition active" data-tab="solution-1" data-key="solutionTab1">مدیریت فعال سلامت</button>
+                    <button class="tab-button p-4 rounded-lg font-semibold transition" data-tab="solution-2" data-key="solutionTab2">دسترسی بی‌درنگ پزشکی و تحرک</button>
+                    <button class="tab-button p-4 rounded-lg font-semibold transition" data-tab="solution-3" data-key="solutionTab3">رفاه اجتماعی و عاطفی پرنشاط</button>
+                    <button class="tab-button p-4 rounded-lg font-semibold transition" data-tab="solution-4" data-key="solutionTab4">توانمندسازی از طریق آموزش و پشتیبانی</button>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg min-h-[200px] flex items-center justify-center">
+                    <div id="solution-1" class="tab-content text-center">
+                        <h4 class="text-2xl font-bold text-[#41B3A3] mb-2" data-key="solution1Title">مدیریت فعال سلامت</h4>
+                        <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto" data-key="solution1Text">سیستم هوشمند ما تضمین می‌کند که سالمندان هیچ گام حیاتی درمانی را از دست ندهند. ما <strong class="text-[#2C3E50]">یادآوری‌های به‌موقع دارو</strong> و <strong class="text-[#2C3E50]">اعلان‌های قرار ملاقات</strong> را از طریق اپلیکیشنی سالمندپسند، پیامک و تماس‌های صوتی شخصی‌سازی شده ارائه می‌دهیم که عوارض بهداشتی قابل پیشگیری را به شدت کاهش می‌دهد.</p>
+                    </div>
+                    <div id="solution-2" class="tab-content hidden text-center">
+                        <h4 class="text-2xl font-bold text-[#41B3A3] mb-2" data-key="solution2Title">دسترسی بی‌درنگ پزشکی و تحرک</h4>
+                        <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto" data-key="solution2Text">ما <strong class="text-[#2C3E50]">رزرو آسان معاینات</strong> با متخصصان پزشکی تأیید شده را فراهم می‌کنیم. پلتفرم ما با ارائه‌دهندگان حمل‌ونقل معتبر برای <strong class="text-[#2C3E50]">سفرهای امن و سالمندپسند</strong> یکپارچه شده است، با گزینه حیاتی <strong class="text-[#2C3E50]">همراه اختیاری</strong> برای آرامش خاطر و کمک بیشتر.</p>
+                    </div>
+                    <div id="solution-3" class="tab-content hidden text-center">
+                        <h4 class="text-2xl font-bold text-[#41B3A3] mb-2" data-key="solution3Title">رفاه اجتماعی و عاطفی پرنشاط</h4>
+                        <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto" data-key="solution3Text">برای مبارزه با همه‌گیری تنهایی، ژیارا <strong class="text-[#2C3E50]">یک باشگاه اجتماعی پویا</strong> را میزبانی می‌کند که هم تعامل آنلاین و هم گردهمایی‌های حضوری و سفرهای سالمندی غنی را ارائه می‌دهد. این امر ارتباط واقعی، ایجاد جامعه و حس تعلق را تقویت می‌کند.</p>
+                    </div>
+                    <div id="solution-4" class="tab-content hidden text-center">
+                        <h4 class="text-2xl font-bold text-[#41B3A3] mb-2" data-key="solution4Title">توانمندسازی از طریق آموزش و پشتیبانی</h4>
+                        <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto" data-key="solution4Text">ما محتوای آموزشی قابل دسترس و <strong class="text-[#2C3E50]">تأیید شده</strong> و مواد حیاتی آگاهی‌بخش سلامت را به‌طور خاص برای سالمندان و خانواده‌هایشان ارائه می‌دهیم. این کار آنها را با دانش توانمند می‌کند و امکان تصمیم‌گیری آگاهانه و خود مراقبتی فعال را فراهم می‌آورد.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Business Case Section -->
+        <section id="business" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="businessTitle">مدل کسب‌وکار: رشد مقیاس‌پذیر و رهبری قابل دفاع</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="businessSubtitle">این بخش مدل درآمدی قوی و متنوع ما را که برای مقیاس‌پذیری بالا و قابلیت دفاع قوی طراحی شده است، به تفصیل شرح می‌دهد. ما مسیر روشن خود را برای رهبری بازار، با پشتیبانی از موقعیت‌یابی رقابتی استراتژیک و نقشه راه اجرایی جاه‌طلبانه اما قابل دستیابی، ترسیم می‌کنیم.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 mb-16 items-start">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-center md:text-right" data-key="revenueModelTitle">مدل درآمدی نوآورانه و اقتصاد واحد قوی</h3>
+                        <div class="bg-gray-50 p-6 rounded-xl space-y-4 shadow-inner h-full">
+                            <p class="text-gray-700 text-lg mb-2 leading-relaxed" data-key="revenueModelText1">مدل درآمدی ژیارا برای <strong class="text-[#41B3A3]">تنوع و مقیاس‌پذیری</strong> ساخته شده است و هم از نیازهای مستقیم مصرف‌کننده و هم از شراکت‌های استراتژیک B2B بهره می‌برد:</p>
+                            <h4 class="font-semibold text-lg text-[#2C3E50]" data-key="b2cStreamsTitle">جریان‌های B2C (سود بالا و تکرار شونده):</h4>
+                            <ul class="list-disc list-inside text-gray-600 mr-4 space-y-1 leading-relaxed">
+                                <li data-key="b2cStream1"><strong class="text-[#2C3E50]">اشتراک ماهانه خانواده:</strong> درآمد اصلی تکرار شونده برای خدمات ضروری یادآوری و پشتیبانی.</li>
+                                <li data-key="b2cStream2"><strong class="text-[#2C3E50]">بسته VIP:</strong> درآمد تکرار شونده پریمیوم شامل حمل‌ونقل پیشرفته و خدمات همراه سالمندان.</li>
+                            </ul>
+                            <h4 class="font-semibold text-lg text-[#2C3E50]" data-key="b2bStreamsTitle">جریان‌های B2B (مقیاس‌پذیر و تأثیرگذار):</h4>
+                            <ul class="list-disc list-inside text-gray-600 mr-4 space-y-1 leading-relaxed">
+                                <li data-key="b2bStream1"><strong class="text-[#2C3E50]">شراکت با بیمه‌ها:</strong> قراردادهایی برای کاهش قابل توجه هزینه‌های بستری از طریق مراقبت فعال، ایجاد سناریوهای برد-برد.</li>
+                                <li data-key="b2bStream2"><strong class="text-[#2C3E50]">کمیسیون‌های اکوسیستم سلامت:</strong> شراکت‌های استراتژیک با کلینیک‌ها، داروخانه‌ها و آزمایشگاه‌ها، کسب کمیسیون به ازای هر تراکنش.</li>
+                            </ul>
+                            <h4 class="font-semibold text-lg text-[#2C3E50]" data-key="sideRevenueTitle">درآمدهای جانبی نوظهور (رشد آینده):</h4>
+                            <ul class="list-disc list-inside text-gray-600 mr-4 space-y-1 leading-relaxed">
+                                <li data-key="sideRevenue1">تبلیغات هدفمند برای محصولات و خدمات مرتبط با سالمندان.</li>
+                                <li data-key="sideRevenue2">فروش و یکپارچه‌سازی دستگاه‌های پزشکی با ارزش بالا و پوشیدنی‌های سلامت IoT.</li>
+                            </ul>
+                            <p class="text-gray-700 mt-4 font-semibold leading-relaxed" data-key="financialProjectionsTitle">پیش‌بینی‌های مالی اولیه (اهداف پایلوت):</p>
+                            <ul class="list-disc list-inside text-gray-600 mr-4 space-y-1 leading-relaxed">
+                                <li data-key="financialProjection1">دستیابی به <strong class="text-[#2C3E50]">حاشیه سود ناخالص قوی ۳۰%</strong> در سال اول.</li>
+                                <li data-key="financialProjection2">حرکت به سمت <strong class="text-[#2C3E50]">جریان نقدی مثبت تا ماه ۱۸</strong>، نشان‌دهنده قابلیت مالی اولیه.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-center md:text-right" data-key="competitiveEdgeTitle">مزیت رقابتی: پیشرو بی‌رقیب در دسته</h3>
+                        <div class="grid grid-cols-2 grid-rows-2 gap-1 border border-gray-200 rounded-lg p-2 h-full">
+                            <div class="competitor-quadrant border-l border-b border-gray-200 p-4 flex flex-col justify-center items-center relative text-right">
+                                <h5 class="font-semibold text-gray-500" data-key="competitorQuadrant1Title">فناوری پایین / پراکنده</h5>
+                                <p class="text-sm text-center" data-key="competitorQuadrant1Text">مراقبت سنتی در منزل، شبکه‌های غیررسمی</p>
+                            </div>
+                            <div class="competitor-quadrant border-b border-gray-200 p-4 flex flex-col justify-center items-center relative text-right">
+                                <h5 class="font-semibold text-gray-500" data-key="competitorQuadrant2Title">فناوری بالا / پراکنده</h5>
+                                <p class="text-sm text-center" data-key="competitorQuadrant2Text">اپلیکیشن‌های خدمات عمومی (اسنپ، اپلیکیشن‌های پزشک)</p>
+                            </div>
+                            <div class="competitor-quadrant border-l border-gray-200 p-4 flex flex-col justify-center items-center relative text-right">
+                                <h5 class="font-semibold text-gray-500" data-key="competitorQuadrant3Title">فناوری پایین / سالمندمحور</h5>
+                                <p class="text-sm text-center" data-key="competitorQuadrant3Text">سازمان‌های مردم‌نهاد تخصصی، مراکز محلی سالمندان</p>
+                            </div>
+                            <div class="competitor-quadrant p-4 flex flex-col justify-center items-center relative bg-[#41B3A3]/20 rounded-md text-right">
+                                <h5 class="font-bold text-[#2C3E50]" data-key="competitorQuadrant4Title">ژیارا</h5>
+                                <p class="text-sm text-center font-semibold text-[#41B3A3]" data-key="competitorQuadrant4Text">اولین پلتفرم یکپارچه، چندکاناله و سالمندمحور</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center md:text-right">
+                            <h4 class="text-lg font-semibold text-[#2C3E50] mb-2" data-key="keyAdvantagesTitle">مزایای دفاعی کلیدی ما:</h4>
+                            <ul class="list-disc list-inside text-gray-600 mx-auto max-w-md space-y-1 leading-relaxed text-right inline-block">
+                                <li data-key="advantage1"><strong class="text-[#2C3E50]">پیشرو بودن در بازار:</strong> ما پیشگام پلتفرم یکپارچه سالمندپسند در ایران هستیم که رهبری زودهنگام بازار را تثبیت می‌کند.</li>
+                                <li data-key="advantage2"><strong class="text-[#2C3E50]">دسترسی بی‌نظیر:</strong> رویکرد چندکاناله ما (اپلیکیشن + پیامک + صدا) تمام سطوح سواد دیجیتال را پوشش می‌دهد و دسترسی گسترده و فراگیری را تضمین می‌کند.</li>
+                                <li data-key="advantage3"><strong class="text-[#2C3E50]">تخصص و شبکه محلی عمیق:</strong> تیم ما دارای تجربه میدانی گسترده و شبکه‌های محلی قوی است که یک مزیت رقابتی بی‌بدیل و تضمین‌کننده ارتباط فرهنگی است.</li>
+                                <li data-key="advantage4"><strong class="text-[#2C3E50]">اکوسیستم جامع:</strong> هیچ بازیگر دیگری مجموعه یکپارچه ما از خدمات سلامت، اجتماعی و تحرک را ارائه نمی‌دهد که ما را به یک راه‌حل جامع و یکپارچه تبدیل می‌کند.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-bold mb-6 text-center" data-key="roadmapTitle">نقشه راه ورود به بازار: جاه‌طلبانه اما قابل دستیابی (۳ سال)</h3>
+                    <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto mb-8" data-key="roadmapSubtitle">استراتژی مرحله‌ای ما، توسعه قوی و مبتنی بر داده را تضمین می‌کند، با شروع از مراکز پرجمعیت شهری در ایران و مقیاس‌پذیری استراتژیک برای تسخیر بازارهای طول عمر منطقه‌ای و جهانی. این یک برنامه برای رشد سریع و در عین حال پایدار است.</p>
+                    <div class="space-y-4">
+                        <div class="roadmap-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="roadmap-trigger w-full text-right p-4 bg-gray-50 hover:bg-gray-100 font-semibold flex justify-between items-center transition duration-300">
+                                <span data-key="roadmapPhase1Title">فاز ۱ – سال اول: تثبیت رهبری بازار اصلی در ایران</span>
+                                <span class="text-xl transform transition-transform duration-300">▼</span>
+                            </button>
+                            <div class="roadmap-content px-4 text-right">
+                                <ul class="list-disc list-inside text-gray-600 pt-2 pb-2 leading-relaxed mr-4">
+                                    <li data-key="roadmapPhase1Item1"><strong class="text-[#2C3E50]">راه‌اندازی MVP:</strong> خدمات اصلی فعال می‌شوند – یادآوری‌ها + رزرو + حمل‌ونقل.</li>
+                                    <li data-key="roadmapPhase1Item2"><strong class="text-[#2C3E50]">پایلوت تهران:</strong> پایلوت متمرکز در تهران با هدف <strong class="text-[#2C3E50]">۵۰,۰۰۰ کاربر فعال</strong> و تأمین <strong class="text-[#2C3E50]">۵ قرارداد B2B استراتژیک</strong> (بیمه/سلامت).</li>
+                                    <li data-key="roadmapPhase1Item3"><strong class="text-[#2C3E50]">هدف:</strong> اعتبارسنجی مدل، بهینه‌سازی تجربه کاربری و تثبیت اعتبار اولیه برند.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="roadmap-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="roadmap-trigger w-full text-right p-4 bg-gray-50 hover:bg-gray-100 font-semibold flex justify-between items-center transition duration-300">
+                                <span data-key="roadmapPhase2Title">فاز ۲ – سال دوم: مقیاس‌گذاری خدمات و گسترش در سراسر ایران</span>
+                                <span class="text-xl transform transition-transform duration-300">▼</span>
+                            </button>
+                            <div class="roadmap-content px-4 text-right">
+                               <ul class="list-disc list-inside text-gray-600 pt-2 pb-2 leading-relaxed mr-4">
+                                    <li data-key="roadmapPhase2Item1"><strong class="text-[#2C3E50]">گسترش خدمات:</strong> یکپارچه‌سازی خدمات پیشرفته مراقبت در منزل.</li>
+                                    <li data-key="roadmapPhase2Item2"><strong class="text-[#2C3E50]">گسترش در شهرهای بزرگ:</strong> گسترش عملیات به <strong class="text-[#2C3E50]">۳ شهر بزرگ دیگر</strong> در ایران، با هدف <strong class="text-[#2C3E50]">۲۰۰,۰۰۰ کاربر فعال</strong> در سراسر کشور.</li>
+                                    <li data-key="roadmapPhase2Item3"><strong class="text-[#2C3E50]">هدف:</strong> تثبیت حضور در بازار ایران و تنوع بخشیدن به پیشنهادات خدماتی.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="roadmap-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="roadmap-trigger w-full text-right p-4 bg-gray-50 hover:bg-gray-100 font-semibold flex justify-between items-center transition duration-300">
+                                <span data-key="roadmapPhase3Title">فاز ۳ – سال سوم: ورود به بازار MENA و تحقق کامل اکوسیستم</span>
+                                <span class="text-xl transform transition-transform duration-300">▼</span>
+                            </button>
+                            <div class="roadmap-content px-4 text-right">
+                                <ul class="list-disc list-inside text-gray-600 pt-2 pb-2 leading-relaxed mr-4">
+                                    <li data-key="roadmapPhase3Item1"><strong class="text-[#2C3E50]">گسترش اکوسیستم:</strong> راه‌اندازی ویژگی‌های جامع باشگاه اجتماعی و سفرهای سالمندی.</li>
+                                    <li data-key="roadmapPhase3Item2"><strong class="text-[#2C3E50]">راه‌اندازی بین‌المللی:</strong> ورود استراتژیک به <strong class="text-[#2C3E50]">بازارهای منتخب MENA</strong>، با بهره‌گیری از مدل تأیید شده و پشته فناوری مقیاس‌پذیر.</li>
+                                    <li data-key="roadmapPhase3Item3"><strong class="text-[#2C3E50]">هدف:</strong> تبدیل شدن به یک رهبر منطقه‌ای، با رشد قابل توجه درآمد و تأثیر اجتماعی.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-bold mb-6 text-center" data-key="revenueProjectionTitle">پیش‌بینی جریان‌های درآمدی</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 text-center md:text-right" data-key="revenueChartTitle">درآمد سالانه بر اساس جریان (سال‌های ۱-۳)</h4>
+                            <div class="bg-gray-50 p-4 rounded-xl shadow">
+                                <div class="chart-container">
+                                    <canvas id="revenueStreamsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 text-center md:text-right" data-key="year3RevenueBreakdownTitle">تجزیه درآمد سال ۳</h4>
+                            <div class="bg-gray-50 p-4 rounded-xl shadow">
+                                <div class="chart-container">
+                                    <canvas id="year3RevenuePieChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow overflow-x-auto mt-8">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="whitespace-nowrap" data-key="revenueTableCol1">جریان درآمد</th>
+                                    <th data-key="revenueTableCol2">سال ۱</th>
+                                    <th data-key="revenueTableCol3">سال ۲</th>
+                                    <th data-key="revenueTableCol4">سال ۳</th>
+                                    <th class="whitespace-nowrap" data-key="revenueTableCol5">درصد از کل سال ۳</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-key="revenueRow1Col1">اشتراک‌های B2C</td>
+                                    <td>$150K</td>
+                                    <td>$400K</td>
+                                    <td>$900K</td>
+                                    <td>40%</td>
+                                </tr>
+                                <tr>
+                                    <td data-key="revenueRow2Col1">قراردادهای B2B (بیمه‌ها، کلینیک‌ها)</td>
+                                    <td>$100K</td>
+                                    <td>$300K</td>
+                                    <td>$700K</td>
+                                    <td>30%</td>
+                                </tr>
+                                <tr>
+                                    <td data-key="revenueRow3Col1">کارمزدهای تراکنش (حمل‌ونقل، معاینات)</td>
+                                    <td>$80K</td>
+                                    <td>$250K</td>
+                                    <td>$500K</td>
+                                    <td>20%</td>
+                                </tr>
+                                <tr>
+                                    <td data-key="revenueRow4Col1">تبلیغات و شراکت‌ها</td>
+                                    <td>$20K</td>
+                                    <td>$50K</td>
+                                    <td>$150K</td>
+                                    <td>10%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-[#2C3E50]" data-key="scenarioAnalysisTitle">✨ تجزیه و تحلیل سناریوی "چه می‌شود اگر"</h3>
+                        <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto" data-key="scenarioAnalysisSubtitle">پتانسیل تأثیر سناریوهای فرضی را بر پیش‌بینی‌های مالی ژیارا بررسی کنید. این ابزار تعاملی، بینش‌های مبتنی بر داده را برای آگاهی‌بخشی به بررسی دقیق شما فراهم می‌کند.</p>
+                    </div>
+                    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                        <div class="mb-4">
+                            <label for="scenario-input" class="block text-gray-700 text-sm font-bold mb-2 text-right" data-key="scenarioInputLabel">سوال شما:</label>
+                            <input type="text" id="scenario-input" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-right" data-key="scenarioInputPlaceholder" placeholder="مثلاً: اگر هزینه‌های جذب کاربر دو برابر شود چه؟">
+                        </div>
+                        <div class="flex items-center justify-between mb-4 flex-row-reverse">
+                            <button id="analyze-scenario-button" class="bg-[#E8A87C] hover:bg-[#D4906F] text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline transition duration-300" data-key="analyzeScenarioButton">
+                                تجزیه و تحلیل سناریو ✨
+                            </button>
+                            <div id="scenario-loading-indicator" class="hidden text-gray-500 flex items-center">
+                                <span class="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-500 ml-2"></span>
+                                <span data-key="analyzingText">در حال تحلیل...</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-[#2C3E50] mb-2 text-right" data-key="aiAnalysisTitle">تجزیه و تحلیل هوش مصنوعی:</h4>
+                            <div id="scenario-analysis-output" class="bg-gray-50 p-4 rounded-md text-gray-700 min-h-[100px] flex items-center justify-center text-center leading-relaxed" data-key="scenarioAnalysisOutputDefault">
+                                تحلیل اینجا ظاهر خواهد شد.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Impact Section -->
+        <section id="impact" class="py-16 md:py-24 bg-[#FDFBF6]">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="impactTitle">تأثیر ما: فراتر از کسب‌وکار، ساختن زندگی‌های بهتر</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="impactSubtitle">ژیارا متعهد به ایجاد تأثیر اجتماعی قابل توجهی است که به طور مستقیم چالش‌های حیاتی پیش روی سالمندان را برطرف می‌کند. پلتفرم ما به طور قابل سنجشی نتایج سلامت را بهبود می‌بخشد، رفاه اجتماعی را ارتقا می‌دهد و کیفیت زندگی را بالا می‌برد.</p>
+                </div>
+                <div class="max-w-3xl mx-auto bg-white p-4 rounded-xl shadow overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="whitespace-nowrap" data-key="impactTableCol1">معیار</th>
+                                <th class="whitespace-nowrap" data-key="impactTableCol2">خط پایه (بدون ژیارا)</th>
+                                <th class="whitespace-nowrap" data-key="impactTableCol3">سال ۳ با ژیارا</th>
+                                <th class="whitespace-nowrap" data-key="impactTableCol4">درصد تأثیر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-key="impactRow1Col1">بستری شدن ناشی از فراموشی دارو</td>
+                                <td data-key="impactRow1Col2">۱۰۰K / سال</td>
+                                <td data-key="impactRow1Col3">۷۰K / سال</td>
+                                <td class="font-semibold text-[#41B3A3]" data-key="impactRow1Col4">-۳۰%</td>
+                            </tr>
+                            <tr>
+                                <td data-key="impactRow2Col1">میانگین فعالیت اجتماعی ماهانه هر سالمند</td>
+                                <td data-key="impactRow2Col2">۱</td>
+                                <td data-key="impactRow2Col3">۳+</td>
+                                <td class="font-semibold text-[#41B3A3]" data-key="impactRow2Col4">+۲۰۰%</td>
+                            </tr>
+                            <tr>
+                                <td data-key="impactRow3Col1">امتیاز کیفیت زندگی گزارش شده توسط خانواده (۱-۱۰)</td>
+                                <td data-key="impactRow3Col2">۵.۵</td>
+                                <td data-key="impactRow3Col3">۸.۰+</td>
+                                <td class="font-semibold text-[#41B3A3]" data-key="impactRow3Col4">+۴۵%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Founder Section (Updated with Contact Info) -->
+        <section id="team" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="founderTitle">بنیان‌گذار: انگیزه، تخصص و چشم‌انداز انسان‌محور</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="founderSubtitle">ژیارا اوج تعهد چندین ساله به نوآوری است که با همدلی عمیق شخصی نسبت به چالش‌های دوران پیری هدایت می‌شود. این داستان بنیان‌گذار پشت این چشم‌انداز است.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="team-member text-center">
+                        <img src="https://placehold.co/128x128/E8A87C/FFFFFF?text=MM" alt="عکس ملیکا میرحسینی، بنیان‌گذار ژیارا" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg object-cover">
+                        <h4 class="font-bold text-xl text-[#2C3E50]" data-key="founderName">ملیکا میرحسینی</h4>
+                        <p class="text-sm text-gray-500 leading-normal max-w-md mx-auto" data-key="founderDegree">
+                            دانشجوی کارشناسی ارشد مهندسی بافت و پزشکی بازساختی
+                        </p>
+                        <div class="mt-4 flex items-center justify-center space-x-4 space-x-reverse text-gray-600">
+                             <a href="mailto:Mirhosseini.melika@gmail.com" class="hover:text-[#E8A87C] transition-colors" aria-label="ایمیل به ملیکا میرحسینی" data-key="founderEmailAria">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            </a>
+                            <a href="http://linkedin.com/in/melikamirhosseini" target="_blank" rel="noopener noreferrer" class="hover:text-[#E8A87C] transition-colors" aria-label="پروفایل لینکدین ملیکا میرحسینی" data-key="founderLinkedinAria">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                            <a href="tel:09999123710" class="hover:text-[#E8A87C] transition-colors" dir="ltr">09999123710</a>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl shadow-inner max-w-2xl mx-auto text-right space-y-4 mt-6">
+                            <div>
+                                <h5 class="font-bold text-lg text-[#41B3A3]" data-key="founderInnovationTitle">سابقه در نوآوری</h5>
+                                <p class="text-gray-700 leading-relaxed" data-key="founderInnovationText">
+                                    با بیش از ۵ سال تجربه در نوآوری و اختراعات، من عضو فدراسیون جهانی مخترعین (IFIA) هستم. دستاوردهای من شامل **۳ مدال طلا و ۲ مدال نقره** از مسابقات بین‌المللی اختراعات است که نشان‌دهنده توانایی در تبدیل ایده‌ها به راه‌حل‌های عملی است.
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg text-[#41B3A3]" data-key="founderMotivationTitle">نیروی محرکه شخصی</h5>
+                                <p class="text-gray-700 leading-relaxed" data-key="founderMotivationText">
+                                    ماموریت شخصی من کاهش درد و نگرانی افراد، بازگرداندن آنها به فضای اجتماعی و کاهش دغدغه‌های فرزندانشان است. این همدلی عمیق و تمایل به ایجاد تأثیر اجتماعی، انگیزه اصلی پشت ایجاد ژیاراست. من این پلتفرم را با این باور آغاز کردم که فناوری می‌تواند و باید برای پرورش زندگی معنادار و ارتباط در دوران سالمندی استفاده شود.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 text-center">
+                    <h3 class="text-2xl font-bold text-[#2C3E50] mb-6" data-key="advisorsTitle">مشاوران استراتژیک: راهنمای مسیر ما</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                        <div class="advisor-member">
+                            <h4 class="font-bold text-lg" data-key="advisor1Title">متخصص سالمندی</h4>
+                            <p class="text-sm text-gray-500 leading-normal" data-key="advisor1Text">بینش‌های ارزشمند در مورد مراقبت، مسیرهای بالینی و رفاه سالمندان را ارائه می‌دهد. </p>
+                        </div>
+                        <div class="advisor-member">
+                            <h4 class="font-bold text-lg" data-key="advisor2Title">کارآفرین سلامت دیجیتال</h4>
+                            <p class="text-sm text-gray-500 leading-normal" data-key="advisor2Text">راهنمایی استراتژیک در مورد ورود به بازار، تناسب محصول با بازار و مقیاس‌پذیری ventures در حوزه فناوری سلامت را فراهم می‌کند.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategic Partnership Section -->
+        <section id="partnership" class="py-16 md:py-24 bg-[#FDFBF6]">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="partnershipTitle">دعوت به شراکت استراتژیک</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="partnershipSubtitle">ما از شرکای آینده‌نگر و پیشرو دعوت می‌کنیم تا در خلق یک آینده بهتر برای سالمندان در منطقه MENA با ما همراه شوند. این همکاری فراتر از سرمایه‌گذاری مالی است و بر پایه هم‌افزایی و ارزش‌های مشترک استوار است.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 text-center md:text-right items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-[#2C3E50]" data-key="partnershipBenefitsTitle">مزایای همکاری با ژیارا</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 leading-relaxed mr-4">
+                            <li data-key="partnershipBenefit1"><strong class="text-[#2C3E50]">دسترسی سریع به بازار:</strong> ورود مستقیم به بازار رو به رشد و دست‌نخورده سالمندی در ایران و MENA.</li>
+                            <li data-key="partnershipBenefit2"><strong class="text-[#2C3E50]">ارزش اجتماعی و برندینگ:</strong> ایجاد تأثیر مثبت اجتماعی و تقویت تصویر برند به عنوان یک سازمان مسئولیت‌پذیر.</li>
+                            <li data-key="partnershipBenefit3"><strong class="text-[#2C3E50]">پلتفرم مکمل:</strong> هم‌افزایی با پلتفرم جامع ما برای ارائه خدمات کامل‌تر و قدرتمندتر.</li>
+                            <li data-key="partnershipBenefit4"><strong class="text-[#2C3E50]">نوآوری در مقیاس:</strong> همکاری در توسعه راه‌حل‌های مبتنی بر هوش مصنوعی و IoT برای یک نیاز اجتماعی حیاتی.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="https://placehold.co/600x400/41B3A3/FFFFFF?text=Strategic+Partnership" alt="تصویر مفهومی از همکاری استراتژیک" class="w-full h-auto rounded-xl shadow-lg">
+                    </div>
+                </div>
+                <div class="mt-12 text-center">
+                    <p class="text-xl text-gray-700 font-semibold max-w-4xl mx-auto" data-key="partnershipCallToActionText">
+                        ما مشتاقانه منتظر گفتگو با شرکای هم‌فکر هستیم تا پتانسیل کامل این فرصت را آشکار کنیم.
+                    </p>
+                    <a href="mailto:Mirhosseini.melika@gmail.com" class="mt-8 inline-block bg-[#41B3A3] hover:bg-[#34988A] text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105" data-key="partnershipCallToActionButton">
+                        همین امروز تماس بگیرید!
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ask Zheeyara AI Section -->
+        <section id="ai-qa" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]" data-key="aiQATitle">✨ از هوش مصنوعی ژیارا بپرسید</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto" data-key="aiQASubtitle">سوالی خاص درباره ژیارا دارید؟ دستیار هوش مصنوعی ما که بر اساس کل این پیچ دک آموزش دیده است، پاسخ‌های فوری و مختصر ارائه می‌دهد تا درک شما را عمیق‌تر کند.</p>
+                </div>
+                <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <label for="qa-input" class="block text-gray-700 text-sm font-bold mb-2 text-right" data-key="qaInputLabel">سوال شما:</label>
+                        <input type="text" id="qa-input" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-right" data-key="qaInputPlaceholder" placeholder="مثلاً: جریان‌های درآمدی اصلی ژیارا کدامند؟">
+                    </div>
+                    <div class="flex items-center justify-between mb-4 flex-row-reverse">
+                        <button id="ask-ai-button" class="bg-[#41B3A3] hover:bg-[#34988A] text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline transition duration-300" data-key="askAiButton">
+                            از هوش مصنوعی ژیارا بپرسید ✨
+                        </button>
+                        <div id="loading-indicator" class="hidden text-gray-500 flex items-center">
+                            <span class="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-500 ml-2"></span>
+                            <span data-key="thinkingText">در حال فکر کردن...</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#2C3E50] mb-2 text-right" data-key="aiAnswerTitle">پاسخ هوش مصنوعی:</h4>
+                        <div id="qa-answer" class="bg-gray-50 p-4 rounded-md text-gray-700 min-h-[100px] flex items-center justify-center text-center leading-relaxed" data-key="qaAnswerDefault">
+                            پاسخ شما اینجا ظاهر خواهد شد.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#2C3E50] text-white">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <h3 class="text-2xl font-bold mb-2" data-key="footerBrand">ژیارا</h3>
+            <p class="mb-4" data-key="footerSlogan">بیایید آینده‌ای بسازیم که در آن هر سالمندی رشد کند.</p>
+            <p class="text-sm text-gray-400" data-key="footerContact">Mirhosseini.melika@gmail.com | 09999123710 | zheeyara.ir</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chartFontColor = '#2C3E50';
+        const gridColor = '#E5E7EB';
+        
+        let revenueStreamsChartInstance, year3RevenuePieChartInstance;
+
+        const translations = {
+            fa: {
+                brandName: 'ژیارا',
+                navOpportunity: 'فرصت',
+                navSolution: 'راه‌حل ما',
+                navBusiness: 'مدل کسب‌وکار',
+                navImpact: 'تأثیر ما',
+                navFounder: 'بنیان‌گذار',
+                navPartnership: 'همکاری',
+                heroTitle: 'پیری سالم، زندگی بامعنا',
+                heroSubtitle: 'پلتفرم یکپارچه سلامت + اجتماعی برای سالمندان در ایران و منطقه MENA',
+                statIranMarket: 'بازار سالمندان ایران (۲۰۲۵)',
+                statGlobalEconomy: 'اقتصاد طول عمر جهانی (۲۰۳۰)',
+                statMenamarket: 'بازار سالمندان MENA',
+                statGlobalEconomyValue: '$15 تریلیون',
+                statMenaMarketValue: '$500 میلیارد',
+                statOpportunity: 'فرصت پیشرو بودن در بازار',
+                statUnrivaled: 'بی‌نظیر',
+                opportunityTitle: 'سکوت رو به رشد و فرصت بزرگ',
+                opportunitySubtitle: 'این بخش چالش‌های حیاتی اجتماعی پیش روی جمعیت سالمند رو به رشد ایران و فرصت عظیم و دست‌نخورده اقتصادی را که از طریق ارائه یک راه‌حل مدرن و مقیاس‌پذیر در منطقه و جهان پدید می‌آید، تشریح می‌کند.',
+                problemTitle: 'مشکل: بحران در مراقبت از سالمندان',
+                problemAgingTitle: 'پیری سریع جمعیت و محرومیت دیجیتال',
+                problemAgingText: 'جمعیت سالمند ایران از ۱۰ میلیون نفر (۱۴%) تا سال ۱۴۱۰ به ۲۰% خواهد رسید. نکته مهم اینجاست که ۷۰% آنها فاقد مهارت‌های دیجیتال هستند که مانع بزرگی برای دسترسی به خدمات نوین سلامت ایجاد می‌کند.',
+                problemLonelinessTitle: 'تنهایی و تأثیرات مخرب بر سلامت',
+                problemLonelinessText: 'انزوای اجتماعی و محدودیت‌های حرکتی باعث افزایش بیماری‌های مزمن، افسردگی و کاهش طول عمر می‌شود. سازمان بهداشت جهانی (WHO) ریسک سلامتی تنهایی را معادل کشیدن ۱۵ سیگار در روز می‌داند.',
+                problemCostsTitle: 'هزینه‌های گزاف قابل پیشگیری',
+                problemCostsText: 'قرارهای پزشکی از دست رفته و سوءمدیریت داروها منجر به میلیاردها دلار هزینه بستری سالانه می‌شود که بار مستقیمی بر سیستم‌های درمانی و خانواده‌هاست.',
+                opportunityStrategicTitle: 'فرصت استراتژیک: بازاری چند میلیارد دلاری در انتظار',
+                opportunityStrategicText1: 'بازار سالمندان در ایران و منطقه وسیع‌تر MENA یک <strong class="text-[#41B3A3]">فرصت صدها میلیارد دلاری</strong> است که به شدت کم‌خدمات‌رسانی شده و بسیار پراکنده است. این وضعیت، نقطه ورود جذابی را برای یک راه‌حل یکپارچه مانند ژیارا ایجاد می‌کند.',
+                opportunityStrategicText2: 'چرا اکنون لحظه‌ای حیاتی است:',
+                opportunityDemographic: '<strong class="text-[#2C3E50]">سونامی جمعیتی:</strong> تغییر بی‌سابقه و سریع به سمت جمعیت‌های سالمند، تقاضای فوری ایجاد کرده است.',
+                opportunityDigital: '<strong class="text-[#2C3E50]">آمادگی دیجیتال:</strong> افزایش نفوذ موبایل و اینترنت در میان سالمندان و خانواده‌هایشان، امکان پذیرش فناوری را فراهم می‌کند.',
+                opportunityVacuum: '<strong class="text-[#2C3E50]">خلأ یکپارچگی:</strong> فقدان کامل یک پلتفرم یکپارچه و سالمندپسند در ایران و MENA، مزیت پیشرو بودن را فراهم می‌کند.',
+                opportunityGlobal: '<strong class="text-[#2C3E50]">موج جهانی طول عمر:</strong> بهره‌برداری از اقتصاد جهانی طول عمر که تا سال ۲۰۳۰ به ۱۵ تریلیون دلار می‌رسد.',
+                marketSizeTitle: 'اندازه بازار و جمعیت‌شناسی',
+                marketSizeTableTitle: 'اندازه بازار (میلیارد دلار)',
+                marketTableHeader1: 'بخش',
+                marketTableHeader2: 'منطقه',
+                marketTableHeader3: 'ارزش ۲۰۲۵',
+                marketTableHeader4: 'رشد مرکب سالانه (۲۰۲۵–۲۰۳۰)',
+                marketRow1Col1: 'کل بازار قابل دستیابی (TAM) – اقتصاد طول عمر',
+                marketRow1Col2: 'جهانی',
+                marketRow2Col1: 'بازار قابل ارائه (SAM) – خدمات سلامت و اجتماعی سالمندان',
+                marketRow2Col2: 'MENA',
+                marketRow3Col1: 'بازار قابل دستیابی عملیاتی (SOM) – سالمندان در ایران',
+                marketRow3Col2: 'ایران',
+                demographicsTableTitle: 'جمعیت‌شناسی و روندهای رشد (ایران)',
+                demographicsTableHeader1: 'معیار',
+                demographicsTableHeader2: 'ایران ۲۰۲۵',
+                demographicsTableHeader3: 'ایران ۲۰۳۰',
+                demographicsTableHeader4: 'توضیحات',
+                demographicsRow1Col1: 'جمعیت ۶۰+ سال',
+                demographicsRow1Col2: '۱۰M (۱۴%)',
+                demographicsRow1Col3: '۱۴M (۲۰%)',
+                demographicsRow1Col4: 'سریعترین رشد در MENA',
+                demographicsRow2Col1: 'نفوذ گوشی هوشمند در ۶۰+',
+                demographicsRow2Col2: '۴۵%',
+                demographicsRow2Col3: '۶۵%',
+                demographicsRow2Col4: 'افزایش سواد دیجیتال',
+                demographicsRow3Col1: 'میانگین هزینه ماهانه سلامت هر سالمند',
+                demographicsRow3Col2: '$50',
+                demographicsRow3Col3: '$70',
+                demographicsRow3Col4: 'هزینه‌های خصوصی + عمومی',
+                solutionTitle: 'راه‌حل ما: اکوسیستم ژیارا',
+                solutionSubtitle: 'ژیارا <strong class="text-[#41B3A3]">پل ارتباطی جامع</strong> است که سالمندان را به خدمات حیاتی سلامت و اجتماعی متصل می‌کند. اکوسیستم مبتنی بر هوش مصنوعی ما برای حداکثر دسترسی طراحی شده است و با فناوری‌های نوآورانه و لمس انسانی دلسوزانه، عزت، ارتباط و استقلال توانمند را تقویت می‌کند. پیشنهادات یکپارچه ما را کاوش کنید:',
+                solutionTab1: 'مدیریت فعال سلامت',
+                solutionTab2: 'دسترسی بی‌درنگ پزشکی و تحرک',
+                solutionTab3: 'رفاه اجتماعی و عاطفی پرنشاط',
+                solutionTab4: 'توانمندسازی از طریق آموزش و پشتیبانی',
+                solution1Title: 'مدیریت فعال سلامت',
+                solution1Text: 'سیستم هوشمند ما تضمین می‌کند که سالمندان هیچ گام حیاتی درمانی را از دست ندهند. ما <strong class="text-[#2C3E50]">یادآوری‌های به‌موقع دارو</strong> و <strong class="text-[#2C3E50]">اعلان‌های قرار ملاقات</strong> را از طریق اپلیکیشنی سالمندپسند، پیامک و تماس‌های صوتی شخصی‌سازی شده ارائه می‌دهیم که عوارض بهداشتی قابل پیشگیری را به شدت کاهش می‌دهد.',
+                solution2Title: 'دسترسی بی‌درنگ پزشکی و تحرک',
+                solution2Text: 'ما <strong class="text-[#2C3E50]">رزرو آسان معاینات</strong> با متخصصان پزشکی تأیید شده را فراهم می‌کنیم. پلتفرم ما با ارائه‌دهندگان حمل‌ونقل معتبر برای <strong class="text-[#2C3E50]">سفرهای امن و سالمندپسند</strong> یکپارچه شده است، با گزینه حیاتی <strong class="text-[#2C3E50]">همراه اختیاری</strong> برای آرامش خاطر و کمک بیشتر.',
+                solution3Title: 'رفاه اجتماعی و عاطفی پرنشاط',
+                solution3Text: 'برای مبارزه با همه‌گیری تنهایی، ژیارا <strong class="text-[#2C3E50]">یک باشگاه اجتماعی پویا</strong> را میزبانی می‌کند که هم تعامل آنلاین و هم گردهمایی‌های حضوری و سفرهای سالمندی غنی را ارائه می‌دهد. این امر ارتباط واقعی، ایجاد جامعه و حس تعلق را تقویت می‌کند.',
+                solution4Title: 'توانمندسازی از طریق آموزش و پشتیبانی',
+                solution4Text: 'ما محتوای آموزشی قابل دسترس و <strong class="text-[#2C3E50]">تأیید شده</strong> و مواد حیاتی آگاهی‌بخش سلامت را به‌طور خاص برای سالمندان و خانواده‌هایشان ارائه می‌دهیم. این کار آنها را با دانش توانمند می‌کند و امکان تصمیم‌گیری آگاهانه و خود مراقبتی فعال را فراهم می‌آورد.',
+                businessTitle: 'مدل کسب‌وکار: رشد مقیاس‌پذیر و رهبری قابل دفاع',
+                businessSubtitle: 'این بخش مدل درآمدی قوی و متنوع ما را که برای مقیاس‌پذیری بالا و قابلیت دفاع قوی طراحی شده است، به تفصیل شرح می‌دهد. ما مسیر روشن خود را برای رهبری بازار، با پشتیبانی از موقعیت‌یابی رقابتی استراتژیک و نقشه راه اجرایی جاه‌طلبانه اما قابل دستیابی، ترسیم می‌کنیم.',
+                revenueModelTitle: 'مدل درآمدی نوآورانه و اقتصاد واحد قوی',
+                revenueModelText1: 'مدل درآمدی ژیارا برای <strong class="text-[#41B3A3]">تنوع و مقیاس‌پذیری</strong> ساخته شده است و هم از نیازهای مستقیم مصرف‌کننده و هم از شراکت‌های استراتژیک B2B بهره می‌برد:',
+                b2cStreamsTitle: 'جریان‌های B2C (سود بالا و تکرار شونده):',
+                b2cStream1: '<strong class="text-[#2C3E50]">اشتراک ماهانه خانواده:</strong> درآمد اصلی تکرار شونده برای خدمات ضروری یادآوری و پشتیبانی.',
+                b2cStream2: '<strong class="text-[#2C3E50]">بسته VIP:</strong> درآمد تکرار شونده پریمیوم شامل حمل‌ونقل پیشرفته و خدمات همراه سالمندان.',
+                b2bStreamsTitle: 'جریان‌های B2B (مقیاس‌پذیر و تأثیرگذار):',
+                b2bStream1: '<strong class="text-[#2C3E50]">شراکت با بیمه‌ها:</strong> قراردادهایی برای کاهش قابل توجه هزینه‌های بستری از طریق مراقبت فعال، ایجاد سناریوهای برد-برد.',
+                b2bStream2: '<strong class="text-[#2C3E50]">کمیسیون‌های اکوسیستم سلامت:</strong> شراکت‌های استراتژیک با کلینیک‌ها، داروخانه‌ها و آزمایشگاه‌ها، کسب کمیسیون به ازای هر تراکنش.',
+                sideRevenueTitle: 'درآمدهای جانبی نوظهور (رشد آینده):',
+                sideRevenue1: 'تبلیغات هدفمند برای محصولات و خدمات مرتبط با سالمندان.',
+                sideRevenue2: 'فروش و یکپارچه‌سازی دستگاه‌های پزشکی با ارزش بالا و پوشیدنی‌های سلامت IoT.',
+                financialProjectionsTitle: 'پیش‌بینی‌های مالی اولیه (اهداف پایلوت):',
+                financialProjection1: 'دستیابی به <strong class="text-[#2C3E50]">حاشیه سود ناخالص قوی ۳۰%</strong> در سال اول.',
+                financialProjection2: 'حرکت به سمت <strong class="text-[#2C3E50]">جریان نقدی مثبت تا ماه ۱۸</strong>، نشان‌دهنده قابلیت مالی اولیه.',
+                competitiveEdgeTitle: 'مزیت رقابتی: پیشرو بی‌رقیب در دسته',
+                competitorQuadrant1Title: 'فناوری پایین / پراکنده',
+                competitorQuadrant1Text: 'مراقبت سنتی در منزل، شبکه‌های غیررسمی',
+                competitorQuadrant2Title: 'فناوری بالا / پراکنده',
+                competitorQuadrant2Text: 'اپلیکیشن‌های خدمات عمومی (اسنپ، اپلیکیشن‌های پزشک)',
+                competitorQuadrant3Title: 'فناوری پایین / سالمندمحور',
+                competitorQuadrant3Text: 'سازمان‌های مردم‌نهاد تخصصی، مراکز محلی سالمندان',
+                competitorQuadrant4Title: 'ژیارا',
+                competitorQuadrant4Text: 'اولین پلتفرم یکپارچه، چندکاناله و سالمندمحور',
+                keyAdvantagesTitle: 'مزایای دفاعی کلیدی ما:',
+                advantage1: '<strong class="text-[#2C3E50]">پیشرو بودن در بازار:</strong> ما پیشگام پلتفرم یکپارچه سالمندپسند در ایران هستیم که رهبری زودهنگام بازار را تثبیت می‌کند.',
+                advantage2: '<strong class="text-[#2C3E50]">دسترسی بی‌نظیر:</strong> رویکرد چندکاناله ما (اپلیکیشن + پیامک + صدا) تمام سطوح سواد دیجیتال را پوشش می‌دهد و دسترسی گسترده و فراگیری را تضمین می‌کند.',
+                advantage3: '<strong class="text-[#2C3E50]">تخصص و شبکه محلی عمیق:</strong> تیم ما دارای تجربه میدانی گسترده و شبکه‌های محلی قوی است که یک مزیت رقابتی بی‌بدیل و تضمین‌کننده ارتباط فرهنگی است.',
+                advantage4: '<strong class="text-[#2C3E50]">اکوسیستم جامع:</strong> هیچ بازیگر دیگری مجموعه یکپارچه ما از خدمات سلامت، اجتماعی و تحرک را ارائه نمی‌دهد که ما را به یک راه‌حل جامع و یکپارچه تبدیل می‌کند.',
+                roadmapTitle: 'نقشه راه ورود به بازار: جاه‌طلبانه اما قابل دستیابی (۳ سال)',
+                roadmapSubtitle: 'استراتژی مرحله‌ای ما، توسعه قوی و مبتنی بر داده را تضمین می‌کند، با شروع از مراکز پرجمعیت شهری در ایران و مقیاس‌پذیری استراتژیک برای تسخیر بازارهای طول عمر منطقه‌ای و جهانی. این یک برنامه برای رشد سریع و در عین حال پایدار است.',
+                roadmapPhase1Title: 'فاز ۱ – سال اول: تثبیت رهبری بازار اصلی در ایران',
+                roadmapPhase1Item1: '<strong class="text-[#2C3E50]">راه‌اندازی MVP:</strong> خدمات اصلی فعال می‌شوند – یادآوری‌ها + رزرو + حمل‌ونقل.',
+                roadmapPhase1Item2: '<strong class="text-[#2C3E50]">پایلوت تهران:</strong> پایلوت متمرکز در تهران با هدف <strong class="text-[#2C3E50]">۵۰,۰۰۰ کاربر فعال</strong> و تأمین <strong class="text-[#2C3E50]">۵ قرارداد B2B استراتژیک</strong> (بیمه/سلامت).',
+                roadmapPhase1Item3: '<strong class="text-[#2C3E50]">هدف:</strong> اعتبارسنجی مدل، بهینه‌سازی تجربه کاربری و تثبیت اعتبار اولیه برند.',
+                roadmapPhase2Title: 'فاز ۲ – سال دوم: مقیاس‌گذاری خدمات و گسترش در سراسر ایران',
+                roadmapPhase2Item1: '<strong class="text-[#2C3E50]">گسترش خدمات:</strong> یکپارچه‌سازی خدمات پیشرفته مراقبت در منزل.',
+                roadmapPhase2Item2: '<strong class="text-[#2C3E50]">گسترش در شهرهای بزرگ:</strong> گسترش عملیات به <strong class="text-[#2C3E50]">۳ شهر بزرگ دیگر</strong> در ایران، با هدف <strong class="text-[#2C3E50]">۲۰۰,۰۰۰ کاربر فعال</strong> در سراسر کشور.',
+                roadmapPhase2Item3: '<strong class="text-[#2C3E50]">هدف:</strong> تثبیت حضور در بازار ایران و تنوع بخشیدن به پیشنهادات خدماتی.',
+                roadmapPhase3Title: 'فاز ۳ – سال سوم: ورود به بازار MENA و تحقق کامل اکوسیستم',
+                roadmapPhase3Item1: '<strong class="text-[#2C3E50]">گسترش اکوسیستم:</strong> راه‌اندازی ویژگی‌های جامع باشگاه اجتماعی و سفرهای سالمندی.',
+                roadmapPhase3Item2: '<strong class="text-[#2C3E50]">راه‌اندازی بین‌المللی:</strong> ورود استراتژیک به <strong class="text-[#2C3E50]">بازارهای منتخب MENA</strong>، با بهره‌گیری از مدل تأیید شده و پشته فناوری مقیاس‌پذیر.',
+                roadmapPhase3Item3: '<strong class="text-[#2C3E50]">هدف:</strong> تبدیل شدن به یک رهبر منطقه‌ای، با رشد قابل توجه درآمد و تأثیر اجتماعی.',
+                revenueProjectionTitle: 'پیش‌بینی جریان‌های درآمدی',
+                revenueChartTitle: 'درآمد سالانه بر اساس جریان (سال‌های ۱-۳)',
+                year3RevenueBreakdownTitle: 'تجزیه درآمد سال ۳',
+                revenueTableCol1: 'جریان درآمد',
+                revenueTableCol2: 'سال ۱',
+                revenueTableCol3: 'سال ۲',
+                revenueTableCol4: 'سال ۳',
+                revenueTableCol5: 'درصد از کل سال ۳',
+                revenueRow1Col1: 'اشتراک‌های B2C',
+                revenueRow2Col1: 'قراردادهای B2B (بیمه‌ها، کلینیک‌ها)',
+                revenueRow3Col1: 'کارمزدهای تراکنش (حمل‌ونقل، معاینات)',
+                revenueRow4Col1: 'تبلیغات و شراکت‌ها',
+                revenueBarChartLabels: ['سال ۱', 'سال ۲', 'سال ۳'],
+                revenueBarChartB2C: 'اشتراک‌های B2C',
+                revenueBarChartB2B: 'قراردادهای B2B',
+                revenueBarChartFees: 'کارمزدهای تراکنش',
+                revenueBarChartAds: 'تبلیغات و شراکت‌ها',
+                revenuePieChartLabels: ['اشتراک‌های B2C (۴۰%)', 'قراردادهای B2B (۳۰%)', 'کارمزدهای تراکنش (۲۰%)', 'تبلیغات و شراکت‌ها (۱۰%)'],
+                scenarioAnalysisTitle: '✨ تجزیه و تحلیل سناریوی "چه می‌شود اگر"',
+                scenarioAnalysisSubtitle: 'پتانسیل تأثیر سناریوهای فرضی را بر پیش‌بینی‌های مالی ژیارا بررسی کنید. این ابزار تعاملی، بینش‌های مبتنی بر داده را برای آگاهی‌بخشی به بررسی دقیق شما فراهم می‌کند.',
+                scenarioInputLabel: 'سوال شما:',
+                scenarioInputPlaceholder: 'مثلاً: اگر هزینه‌های جذب کاربر دو برابر شود چه؟',
+                analyzeScenarioButton: 'تجزیه و تحلیل سناریو ✨',
+                analyzingText: 'در حال تحلیل...',
+                aiAnalysisTitle: 'تجزیه و تحلیل هوش مصنوعی:',
+                scenarioAnalysisOutputDefault: 'تحلیل اینجا ظاهر خواهد شد.',
+                impactTitle: 'تأثیر ما: فراتر از کسب‌وکار، ساختن زندگی‌های بهتر',
+                impactSubtitle: 'ژیارا متعهد به ایجاد تأثیر اجتماعی قابل توجهی است که به طور مستقیم چالش‌های حیاتی پیش روی سالمندان را برطرف می‌کند. پلتفرم ما به طور قابل سنجشی نتایج سلامت را بهبود می‌بخشد، رفاه اجتماعی را ارتقا می‌دهد و کیفیت زندگی را بالا می‌برد.',
+                impactTableCol1: 'معیار',
+                impactTableCol2: 'خط پایه (بدون ژیارا)',
+                impactTableCol3: 'سال ۳ با ژیارا',
+                impactTableCol4: 'درصد تأثیر',
+                impactRow1Col1: 'بستری شدن ناشی از فراموشی دارو',
+                impactRow1Col2: '۱۰۰K / سال',
+                impactRow1Col3: '۷۰K / سال',
+                impactRow1Col4: '-۳۰%',
+                impactRow2Col1: 'میانگین فعالیت اجتماعی ماهانه هر سالمند',
+                impactRow2Col2: '۱',
+                impactRow2Col3: '۳+',
+                impactRow2Col4: '+۲۰۰%',
+                impactRow3Col1: 'امتیاز کیفیت زندگی گزارش شده توسط خانواده (۱-۱۰)',
+                impactRow3Col2: '۵.۵',
+                impactRow3Col3: '۸.۰+',
+                impactRow3Col4: '+۴۵%',
+                founderTitle: 'بنیان‌گذار: انگیزه، تخصص و چشم‌انداز انسان‌محور',
+                founderSubtitle: 'ژیارا اوج تعهد چندین ساله به نوآوری است که با همدلی عمیق شخصی نسبت به چالش‌های دوران پیری هدایت می‌شود. این داستان بنیان‌گذار پشت این چشم‌انداز است.',
+                founderName: 'ملیکا میرحسینی',
+                founderDegree: 'دانشجوی کارشناسی ارشد مهندسی بافت و پزشکی بازساختی',
+                founderEmailAria: 'ایمیل به ملیکا میرحسینی',
+                founderLinkedinAria: 'پروفایل لینکدین ملیکا میرحسینی',
+                founderInnovationTitle: 'سابقه در نوآوری',
+                founderInnovationText: 'با بیش از ۵ سال تجربه در نوآوری و اختراعات، من عضو فدراسیون جهانی مخترعین (IFIA) هستم. دستاوردهای من شامل **۳ مدال طلا و ۲ مدال نقره** از مسابقات بین‌المللی اختراعات است که نشان‌دهنده توانایی در تبدیل ایده‌ها به راه‌حل‌های عملی است.',
+                founderMotivationTitle: 'نیروی محرکه شخصی',
+                founderMotivationText: 'ماموریت شخصی من کاهش درد و نگرانی افراد، بازگرداندن آنها به فضای اجتماعی و کاهش دغدغه‌های فرزندانشان است. این همدلی عمیق و تمایل به ایجاد تأثیر اجتماعی، انگیزه اصلی پشت ایجاد ژیاراست. من این پلتفرم را با این باور آغاز کردم که فناوری می‌تواند و باید برای پرورش زندگی معنادار و ارتباط در دوران سالمندی استفاده شود.',
+                advisorsTitle: 'مشاوران استراتژیک: راهنمای مسیر ما',
+                advisor1Title: 'متخصص سالمندی',
+                advisor1Text: 'بینش‌های ارزشمند در مورد مراقبت، مسیرهای بالینی و رفاه سالمندان را ارائه می‌دهد.',
+                advisor2Title: 'کارآفرین سلامت دیجیتال',
+                advisor2Text: 'راهنمایی استراتژیک در مورد ورود به بازار، تناسب محصول با بازار و مقیاس‌پذیری ventures در حوزه فناوری سلامت را فراهم می‌کند.',
+                partnershipTitle: 'دعوت به شراکت استراتژیک',
+                partnershipSubtitle: 'ما از شرکای آینده‌نگر و پیشرو دعوت می‌کنیم تا در خلق یک آینده بهتر برای سالمندان در منطقه MENA با ما همراه شوند. این همکاری فراتر از سرمایه‌گذاری مالی است و بر پایه هم‌افزایی و ارزش‌های مشترک استوار است.',
+                partnershipBenefitsTitle: 'مزایای همکاری با ژیارا',
+                partnershipBenefit1: '<strong class="text-[#2C3E50]">دسترسی سریع به بازار:</strong> ورود مستقیم به بازار رو به رشد و دست‌نخورده سالمندی در ایران و MENA.',
+                partnershipBenefit2: '<strong class="text-[#2C3E50]">ارزش اجتماعی و برندینگ:</strong> ایجاد تأثیر مثبت اجتماعی و تقویت تصویر برند به عنوان یک سازمان مسئولیت‌پذیر.',
+                partnershipBenefit3: '<strong class="text-[#2C3E50]">پلتفرم مکمل:</strong> هم‌افزایی با پلتفرم جامع ما برای ارائه خدمات کامل‌تر و قدرتمندتر.',
+                partnershipBenefit4: '<strong class="text-[#2C3E50]">نوآوری در مقیاس:</strong> همکاری در توسعه راه‌حل‌های مبتنی بر هوش مصنوعی و IoT برای یک نیاز اجتماعی حیاتی.',
+                partnershipCallToActionText: 'ما مشتاقانه منتظر گفتگو با شرکای هم‌فکر هستیم تا پتانسیل کامل این فرصت را آشکار کنیم.',
+                partnershipCallToActionButton: 'همین امروز تماس بگیرید!',
+                aiQATitle: '✨ از هوش مصنوعی ژیارا بپرسید',
+                aiQASubtitle: 'سوالی خاص درباره ژیارا دارید؟ دستیار هوش مصنوعی ما که بر اساس کل این پیچ دک آموزش دیده است، پاسخ‌های فوری و مختصر ارائه می‌دهد تا درک شما را عمیق‌تر کند.',
+                qaInputLabel: 'سوال شما:',
+                qaInputPlaceholder: 'مثلاً: جریان‌های درآمدی اصلی ژیارا کدامند؟',
+                askAiButton: 'از هوش مصنوعی ژیارا بپرسید ✨',
+                thinkingText: 'در حال فکر کردن...',
+                aiAnswerTitle: 'پاسخ هوش مصنوعی:',
+                qaAnswerDefault: 'پاسخ شما اینجا ظاهر خواهد شد.',
+                footerBrand: 'ژیارا',
+                footerSlogan: 'بیایید آینده‌ای بسازیم که در آن هر سالمندی رشد کند.',
+                footerContact: 'Mirhosseini.melika@gmail.com | 09999123710 | zheeyara.ir'
+            },
+            en: {
+                brandName: 'Zheeyara',
+                navOpportunity: 'The Opportunity',
+                navSolution: 'Our Solution',
+                navBusiness: 'Business Case',
+                navImpact: 'Our Impact',
+                navFounder: 'The Founder',
+                navPartnership: 'Partnership',
+                heroTitle: 'Healthy Ageing, Meaningful Living',
+                heroSubtitle: 'Integrated Health + Social Platform for Seniors in Iran and MENA',
+                statIranMarket: 'Iran Senior Market (2025)',
+                statGlobalEconomy: 'Global Longevity Economy (2030)',
+                statMenamarket: 'MENA Senior Market',
+                statGlobalEconomyValue: '$15 Trillion',
+                statMenaMarketValue: '$500 Billion',
+                statOpportunity: 'Unrivaled Market Opportunity',
+                statUnrivaled: 'Unique',
+                opportunityTitle: 'The Growing Silence & The Silver Lining',
+                opportunitySubtitle: 'This section outlines the critical social challenges facing Iran\'s rapidly aging population and the immense, untapped economic opportunity that arises from addressing these needs with a dedicated, modern solution that scales regionally and globally.',
+                problemTitle: 'The Problem: A Crisis in Elder Care',
+                problemAgingTitle: 'Rapid Aging & Digital Exclusion',
+                problemAgingText: 'Iran\'s senior population is set to grow from 10M (14%) to 20% by 2031. Critically, 70% lack digital skills, creating a massive barrier to accessing modern healthcare services.',
+                problemLonelinessTitle: 'Loneliness & Devastating Health Impacts',
+                problemLonelinessText: 'Social isolation and limited mobility are fueling chronic illness, depression, and reduced lifespans. The WHO equates the health risk of loneliness to smoking 15 cigarettes/day.',
+                problemCostsTitle: 'Staggering Preventable Costs',
+                problemCostsText: 'Missed appointments and mismanaged medication lead to billions in annual hospitalization costs, a direct burden on healthcare systems and families.',
+                opportunityStrategicTitle: 'The Strategic Opportunity: A Multi-Billion Market Awaits',
+                opportunityStrategicText1: 'The senior market in Iran and the broader MENA region is a <strong class="text-[#41B3A3]">hundreds-of-billions-USD opportunity</strong>, vastly underserved and highly fragmented. This creates a compelling entry point for an integrated solution like Zheeyara.',
+                opportunityStrategicText2: 'Why Now is the Critical Moment:',
+                opportunityDemographic: '<strong class="text-[#2C3E50]">Demographic Tsunami:</strong> Unprecedented rapid shift towards aging populations, creating urgent demand.',
+                opportunityDigital: '<strong class="text-[#2C3E50]">Digital Readiness:</strong> Increasing mobile & internet penetration among seniors and their families, enabling tech adoption.',
+                opportunityVacuum: '<strong class="text-[#2C3E50]">Vacuum of Integration:</strong> A complete absence of an an integrated, senior-friendly platform in Iran and MENA presents a first-mover advantage.',
+                opportunityGlobal: '<strong class="text-[#2C3E50]">Global Longevity Wave:</strong> Tapping into a global longevity economy projected at $15 Trillion by 2030.',
+                marketSizeTitle: 'Market Size & Demographics',
+                marketSizeTableTitle: 'Market Size (USD Billions)',
+                marketTableHeader1: 'Segment',
+                marketTableHeader2: 'Region',
+                marketTableHeader3: '2025 Value',
+                marketTableHeader4: 'CAGR (\'25–\'30)',
+                marketRow1Col1: 'Total Addressable Market (TAM) – Longevity Economy',
+                marketRow1Col2: 'Global',
+                marketRow2Col1: 'Serviceable Available Market (SAM) – Seniors Health & Social Services',
+                marketRow2Col2: 'MENA',
+                marketRow3Col1: 'Serviceable Obtainable Market (SOM) – Seniors in Iran',
+                marketRow3Col2: 'Iran',
+                demographicsTableTitle: 'Demographics & Growth Trends (Iran)',
+                demographicsTableHeader1: 'Metric',
+                demographicsTableHeader2: 'Iran 2025',
+                demographicsTableHeader3: 'Iran 2030',
+                demographicsTableHeader4: 'Notes',
+                demographicsRow1Col1: 'Population 60+ years old',
+                demographicsRow1Col2: '10M (14%)',
+                demographicsRow1Col3: '14M (20%)',
+                demographicsRow1Col4: 'Fastest growth in MENA',
+                demographicsRow2Col1: 'Smartphone Penetration in 60+',
+                demographicsRow2Col2: '45%',
+                demographicsRow2Col3: '65%',
+                demographicsRow2Col4: 'Digital literacy rising',
+                demographicsRow3Col1: 'Average Monthly Health Spend per Senior',
+                demographicsRow3Col2: '$50',
+                demographicsRow3Col3: '$70',
+                demographicsRow3Col4: 'Private + public spending',
+                solutionTitle: 'Our Solution: The Zheeyara Ecosystem',
+                solutionSubtitle: 'Zheeyara is the <strong class="text-[#41B3A3]">holistic bridge</strong> connecting seniors to vital healthcare and social services. Our AI-powered ecosystem is designed for maximum accessibility, fostering dignity, connection, and empowered independence through innovative technology and compassionate human touch. Explore our integrated offerings:',
+                solutionTab1: 'Proactive Health Management',
+                solutionTab2: 'Seamless Medical Access & Mobility',
+                solutionTab3: 'Vibrant Social & Emotional Well-being',
+                solutionTab4: 'Empowering Education & Support',
+                solution1Title: 'Proactive Health Management',
+                solution1Text: 'Our intelligent system ensures seniors never miss vital health steps. We provide <strong class="text-[#2C3E50]">timely medication reminders</strong> and <strong class="text-[#2C3E50]">appointment notifications</strong> through a senior-friendly app, SMS, and personalized voice calls, drastically reducing preventable health complications.',
+                solution2Title: 'Seamless Medical Access & Mobility',
+                solution2Text: 'We facilitate <strong class="text-[#2C3E50]">easy check-up booking</strong> with verified medical professionals. Our platform integrates with trusted transportation providers for <strong class="text-[#2C3E50]">safe, elderly-friendly rides</strong>, with the crucial option of an <strong class="text-[#2C3E50]">optional companion</strong> for enhanced peace of mind and assistance.',
+                solution3Title: 'Vibrant Social & Emotional Well-being',
+                solution3Text: 'To combat the loneliness epidemic, Zheeyara hosts a <strong class="text-[#2C3E50]">dynamic social club</strong> offering both online engagement and enriching in-person gatherings and senior trips. This fosters genuine connection, community building, and a sense of belonging.',
+                solution4Title: 'Empowering Education & Support',
+                solution4Text: 'We provide accessible, <strong class="text-[#2C3E50]">verified educational content</strong> and critical health awareness materials tailored specifically for seniors and their families. This empowers them with knowledge, enabling informed decisions and proactive self-care.',
+                businessTitle: 'The Business Case: Scalable Growth & Defensible Leadership',
+                businessSubtitle: 'This section details our robust, diversified revenue model designed for high scalability and strong defensibility. We outline our clear path to market leadership, supported by strategic competitive positioning and an ambitious yet achievable execution roadmap.',
+                revenueModelTitle: 'Innovative Revenue Model & Strong Unit Economics',
+                revenueModelText1: 'Zheeyara\'s revenue model is built for <strong class="text-[#41B3A3]">diversification and scale</strong>, capitalizing on both direct consumer needs and strategic B2B partnerships:',
+                b2cStreamsTitle: 'B2C Streams (High Margin & Recurring):',
+                b2cStream1: '<strong class="text-[#2C3E50]">Monthly Family Subscription:</strong> Core recurring revenue for essential reminder and support services.',
+                b2cStream2: '<strong class="text-[#2C3E50]">VIP Package:</strong> Premium recurring revenue including enhanced transport and white-glove senior companion services.',
+                b2bStreamsTitle: 'B2B Streams (Scalable & Impactful):',
+                b2bStream1: '<strong class="text-[#2C3E50]">Insurance Partnerships:</strong> Contracts to significantly reduce hospitalization costs through proactive care, creating win-win scenarios.',
+                b2bStream2: '<strong class="text-[#2C3E50]">Healthcare Ecosystem Commissions:</strong> Strategic partnerships with clinics, pharmacies, and labs, earning a commission per transaction.',
+                sideRevenueTitle: 'Emerging Side Revenue (Future Growth):',
+                sideRevenue1: 'Targeted advertising for senior-relevant products and services.',
+                sideRevenue2: 'Sales and integration of high-value medical devices and IoT health wearables.',
+                financialProjectionsTitle: 'Initial Financial Projections (Illustrative Pilot Goals):',
+                financialProjection1: 'Achieve a <strong class="text-[#2C3E50]">robust 30% gross margin</strong> in Year 1.',
+                financialProjection2: 'Drive towards <strong class="text-[#2C3E50]">positive cash flow by Month 18</strong>, demonstrating early financial viability.',
+                competitiveEdgeTitle: 'Competitive Edge: The Undisputed Category Leader',
+                competitorQuadrant1Title: 'Low Tech / Fragmented',
+                competitorQuadrant1Text: 'Traditional Home Care, Informal Networks',
+                competitorQuadrant2Title: 'High Tech / Fragmented',
+                competitorQuadrant2Text: 'General Service Apps (Snapp, Doctor Apps)',
+                competitorQuadrant3Title: 'Low Tech / Elder-Focused',
+                competitorQuadrant3Text: 'Niche NGOs, Local Senior Centers',
+                competitorQuadrant4Title: 'Zheeyara',
+                competitorQuadrant4Text: 'First Integrated, Multi-channel & Senior-Centric Platform',
+                keyAdvantagesTitle: 'Our Key Defensible Advantages:',
+                advantage1: '<strong class="text-[#2C3E50]">First-Mover Dominance:</strong> We are the pioneer integrated senior-friendly platform in Iran, establishing early market leadership.',
+                advantage2: '<strong class="text-[#2C3E50]">Unparalleled Accessibility:</strong> Our multi-channel approach (app + SMS + voice) caters to all digital literacy levels, ensuring broad reach and inclusivity.',
+                advantage3: '<strong class="text-[#2C3E50]">Deep Local Expertise & Network:</strong> Our team boasts extensive field experience and strong local networks, providing an invaluable competitive moat and ensuring cultural relevance.',
+                advantage4: '<strong class="text-[#2C3E50]">Holistic Ecosystem:</strong> No other player offers our integrated suite of health, social, and mobility services, making us a comprehensive, one-stop solution.',
+                roadmapTitle: 'Ambitious Yet Achievable Go-to-Market Roadmap (3 Years)',
+                roadmapSubtitle: 'Our phased strategy ensures robust, data-driven expansion, starting with high-density urban centers in Iran and strategically scaling to capture regional and global longevity markets. This is a plan built for rapid, yet sustainable, growth.',
+                roadmapPhase1Title: 'Phase 1 – Year 1: Establishing Core Market Leadership in Iran',
+                roadmapPhase1Item1: '<strong class="text-[#2C3E50]">MVP Launch:</strong> Core services go live – reminders + booking + transportation.',
+                roadmapPhase1Item2: '<strong class="text-[#2C3E50]">Tehran Pilot:</strong> Focused pilot in Tehran targeting <strong class="text-[#2C3E50]">50,000 active users</strong> and securing <strong class="text-[#2C3E50]">5 strategic B2B contracts</strong> (insurance/healthcare).',
+                roadmapPhase1Item3: '<strong class="text-[#2C3E50]">Goal:</strong> Validate model, optimize user experience, and establish initial brand authority.',
+                roadmapPhase2Title: 'Phase 2 – Year 2: Scaling Services & Expanding Across Iran',
+                roadmapPhase2Item1: '<strong class="text-[#2C3E50]">Service Expansion:</strong> Integrate advanced home healthcare services.',
+                roadmapPhase2Item2: '<strong class="text-[#2C3E50]">Major City Expansion:</strong> Expand operations to <strong class="text-[#2C3E50]">3 additional major cities</strong> in Iran, targeting <strong class="text-[#2C3E50]">200,000 active users</strong> nationwide.',
+                roadmapPhase2Item3: '<strong class="text-[#2C3E50]">Goal:</strong> Cement Iranian market presence and diversify service offerings.',
+                roadmapPhase3Title: 'Phase 3 – Year 3: MENA Market Entry & Full Ecosystem Realization',
+                roadmapPhase3Item1: '<strong class="text-[#2C3E50]">Ecosystem Expansion:</strong> Launch comprehensive social club features and senior trips.',
+                roadmapPhase3Item2: '<strong class="text-[#2C3E50]">International Launch:</strong> Strategically enter <strong class="text-[#2C3E50]">selected MENA markets</strong>, leveraging validated model and scalable tech stack.',
+                roadmapPhase3Item3: '<strong class="text-[#2C3E50]">Goal:</strong> Transform into a regional leader, driving significant revenue growth and social impact.',
+                revenueProjectionTitle: 'Revenue Streams Projection',
+                revenueChartTitle: 'Annual Revenue by Stream (Years 1-3)',
+                year3RevenueBreakdownTitle: 'Year 3 Revenue Breakdown',
+                revenueTableCol1: 'Revenue Stream',
+                revenueTableCol2: 'Year 1',
+                revenueTableCol3: 'Year 2',
+                revenueTableCol4: 'Year 3',
+                revenueTableCol5: '% of Total Year 3',
+                revenueRow1Col1: 'B2C Subscriptions',
+                revenueRow2Col1: 'B2B Contracts (insurance, clinics)',
+                revenueRow3Col1: 'Transaction Fees (transport, check-ups)',
+                revenueRow4Col1: 'Advertising & Partnerships',
+                revenueBarChartLabels: ['Year 1', 'Year 2', 'Year 3'],
+                revenueBarChartB2C: 'B2C Subscriptions',
+                revenueBarChartB2B: 'B2B Contracts',
+                revenueBarChartFees: 'Transaction Fees',
+                revenueBarChartAds: 'Advertising & Partnerships',
+                revenuePieChartLabels: ['B2C Subscriptions (40%)', 'B2B Contracts (30%)', 'Transaction Fees (20%)', 'Advertising & Partnerships (10%)'],
+                scenarioAnalysisTitle: '✨ "What If" Scenario Analysis',
+                scenarioAnalysisSubtitle: 'Explore the potential impact of hypothetical scenarios on Zheeyara\'s financial projections. This interactive tool provides data-driven insights to inform your due diligence.',
+                scenarioInputLabel: 'Your Question:',
+                scenarioInputPlaceholder: 'e.g., What if user acquisition costs double in 2027?',
+                analyzeScenarioButton: 'Analyze Scenario ✨',
+                analyzingText: 'Analyzing...',
+                aiAnalysisTitle: 'AI\'s Analysis:',
+                scenarioAnalysisOutputDefault: 'Analysis will appear here.',
+                impactTitle: 'Our Impact: Beyond Business, Building Better Lives',
+                impactSubtitle: 'Zheeyara is committed to driving significant social impact by directly addressing critical challenges faced by seniors. Our platform measurably improves health outcomes, enhances social well-being, and elevates quality of life.',
+                impactTableCol1: 'Metric',
+                impactTableCol2: 'Baseline (No Zheeyara)',
+                impactTableCol3: 'Year 3 with Zheeyara',
+                impactTableCol4: 'Impact %',
+                impactRow1Col1: 'Hospitalizations from missed medication',
+                impactRow1Col2: '100K / year',
+                impactRow1Col3: '70K / year',
+                impactRow1Col4: '-30%',
+                impactRow2Col1: 'Average monthly social activity per senior',
+                impactRow2Col2: '1',
+                impactRow2Col3: '3+',
+                impactRow2Col4: '+200%',
+                impactRow3Col1: 'Family-reported quality of life score (1-10)',
+                impactRow3Col2: '5.5',
+                impactRow3Col3: '8.0+',
+                impactRow3Col4: '+45%',
+                founderTitle: 'The Founder: Passion, Expertise & a Human-First Vision',
+                founderSubtitle: 'Zheeyara is the culmination of a decade-long commitment to innovation, driven by a deep personal empathy for the challenges of ageing. This is the story of the founder behind the vision.',
+                founderName: 'Melika Mirhossini',
+                founderDegree: 'M.Sc. Tissue Engineering & Regenerative Medicine',
+                founderEmailAria: 'Email Melika Mirhosseini',
+                founderLinkedinAria: 'View Melika Mirhosseini\'s LinkedIn profile',
+                founderInnovationTitle: 'Background in Innovation',
+                founderInnovationText: 'With over 5 years of experience in innovation and inventions, I am a member of the International Federation of Inventors\' Associations (IFIA). My achievements include **3 gold and 2 silver medals** from international invention competitions, demonstrating a proven ability to translate ideas into practical solutions.',
+                founderMotivationTitle: 'The Personal Drive',
+                founderMotivationText: 'My personal mission is to reduce the pain and worry people experience, to bring them back into social life, and to alleviate the concerns of their families. This deep-seated empathy and desire for social impact is the core motivation behind creating Zheeyara. I started this platform with the belief that technology can and must be used to foster meaningful living and connection in our later years.',
+                advisorsTitle: 'Strategic Advisors: Guiding Our Trajectory',
+                advisor1Title: 'Geriatrics Specialist',
+                advisor1Text: 'Invaluable insights into elderly care, clinical pathways, and wellness.',
+                advisor2Title: 'Healthtech Entrepreneur',
+                advisor2Text: 'Provides strategic guidance on market entry, product-market fit, and scaling health technology ventures.',
+                partnershipTitle: 'Invitation to Strategic Partnership',
+                partnershipSubtitle: 'We invite forward-thinking and leading partners to join us in creating a better future for seniors in the MENA region. This collaboration extends beyond financial investment, built on synergy and shared values.',
+                partnershipBenefitsTitle: 'Benefits of Partnering with Zheeyara',
+                partnershipBenefit1: '<strong class="text-[#2C3E50]">Rapid Market Access:</strong> Direct entry into the growing and untapped senior market in Iran and MENA.',
+                partnershipBenefit2: '<strong class="text-[#2C3E50]">Social Value & Branding:</strong> Creating significant social impact and enhancing brand image as a socially responsible organization.',
+                partnershipBenefit3: '<strong class="text-[#2C3E50]">Complementary Platform:</strong> Synergy with our comprehensive platform to offer more complete and powerful services.',
+                partnershipBenefit4: '<strong class="text-[#2C3E50]">Innovation at Scale:</strong> Collaborating on developing AI and IoT-driven solutions for a critical social need.',
+                partnershipCallToActionText: 'We eagerly await discussions with like-minded partners to unlock the full potential of this opportunity.',
+                partnershipCallToActionButton: 'Contact Us Today!',
+                aiQATitle: '✨ Ask Zheeyara AI',
+                aiQASubtitle: 'Have a specific question about Zheeyara? Our AI assistant, trained on this entire pitch deck, provides instant, concise answers to deepen your understanding.',
+                qaInputLabel: 'Your Question:',
+                qaInputPlaceholder: 'e.g., What are Zheeyara\'s main revenue streams?',
+                askAiButton: 'Ask Zheeyara AI ✨',
+                thinkingText: 'Thinking...',
+                aiAnswerTitle: 'AI\'s Answer:',
+                qaAnswerDefault: 'Your answer will appear here.',
+                footerBrand: 'Zheeyara',
+                footerSlogan: 'Let\'s build a future where every elder thrives.',
+                footerContact: 'Mirhosseini.melika@gmail.com | 09999123710 | zheeyara.ir'
+            }
+        };
+
+        let currentLang = 'fa';
+
+        function updateContent(lang) {
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    if(element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+                        element.placeholder = translations[lang][key];
+                    } else if (element.hasAttribute('aria-label')) {
+                        element.setAttribute('aria-label', translations[lang][key]);
+                    }
+                    else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+
+            document.documentElement.lang = lang;
+            document.documentElement.dir = (lang === 'fa') ? 'rtl' : 'ltr';
+
+            document.getElementById('lang-fa').classList.toggle('bg-[#41B3A3]', lang === 'fa');
+            document.getElementById('lang-fa').classList.toggle('text-white', lang === 'fa');
+            document.getElementById('lang-fa').classList.toggle('bg-gray-200', lang !== 'fa');
+            document.getElementById('lang-fa').classList.toggle('text-[#2C3E50]', lang !== 'fa');
+
+            document.getElementById('lang-en').classList.toggle('bg-[#41B3A3]', lang === 'en');
+            document.getElementById('lang-en').classList.toggle('text-white', lang === 'en');
+            document.getElementById('lang-en').classList.toggle('bg-gray-200', lang !== 'en');
+            document.getElementById('lang-en').classList.toggle('text-[#2C3E50]', lang !== 'en');
+            
+            updateTableHeadersForMobile();
+            renderCharts(lang);
+        }
+
+        function renderCharts(lang) {
+            if (revenueStreamsChartInstance) revenueStreamsChartInstance.destroy();
+            if (year3RevenuePieChartInstance) year3RevenuePieChartInstance.destroy();
+
+            const revenueStreamsData = {
+                labels: translations[lang].revenueBarChartLabels,
+                datasets: [
+                    { label: translations[lang].revenueBarChartB2C, data: [150, 400, 900], backgroundColor: '#41B3A3' },
+                    { label: translations[lang].revenueBarChartB2B, data: [100, 300, 700], backgroundColor: '#E8A87C' },
+                    { label: translations[lang].revenueBarChartFees, data: [80, 250, 500], backgroundColor: '#2C3E50' },
+                    { label: translations[lang].revenueBarChartAds, data: [20, 50, 150], backgroundColor: '#CCCCCC' }
+                ]
+            };
+            const revenueStreamsCanvas = document.getElementById('revenueStreamsChart');
+            if (revenueStreamsCanvas) {
+                const revenueStreamsCtx = revenueStreamsCanvas.getContext('2d');
+                revenueStreamsChartInstance = new Chart(revenueStreamsCtx, {
+                    type: 'bar',
+                    data: revenueStreamsData,
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: {
+                            title: { display: false },
+                            tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(c.parsed.y * 1000)}` } }
+                        },
+                        scales: {
+                            x: { stacked: true, ticks: { color: chartFontColor }, grid: { display: false } },
+                            y: { stacked: true, beginAtZero: true, ticks: { color: chartFontColor, callback: (v) => `$${v}K` }, grid: { color: gridColor } }
+                        }
+                    }
+                });
+            }
+
+            const year3RevenuePieData = {
+                labels: translations[lang].revenuePieChartLabels,
+                datasets: [{ data: [40, 30, 20, 10], backgroundColor: ['#41B3A3', '#E8A87C', '#2C3E50', '#CCCCCC'], hoverOffset: 4 }]
+            };
+            const year3RevenuePieCanvas = document.getElementById('year3RevenuePieChart');
+            if (year3RevenuePieCanvas) {
+                const year3RevenuePieCtx = year3RevenuePieCanvas.getContext('2d');
+                year3RevenuePieChartInstance = new Chart(year3RevenuePieCtx, {
+                    type: 'doughnut',
+                    data: year3RevenuePieData,
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: chartFontColor } }, tooltip: { callbacks: { label: (c) => c.label } } }
+                    }
+                });
+            }
+        }
+
+        document.getElementById('lang-fa').addEventListener('click', () => { currentLang = 'fa'; updateContent('fa'); });
+        document.getElementById('lang-en').addEventListener('click', () => { currentLang = 'en'; updateContent('en'); });
+
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                tabContents.forEach(content => content.id === button.dataset.tab ? content.classList.remove('hidden') : content.classList.add('hidden'));
+            });
+        });
+        
+        const roadmapTriggers = document.querySelectorAll('.roadmap-trigger');
+        roadmapTriggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.parentElement;
+                item.classList.toggle('active');
+                trigger.querySelector('span:last-child').style.transform = item.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) link.classList.add('active');
+                    });
+                }
+            });
+        }, { rootMargin: "-50% 0px -50% 0px" });
+        sections.forEach(section => observer.observe(section));
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuButton.innerHTML = isOpen ? '✕' : '☰';
+            mobileMenuButton.setAttribute('aria-label', isOpen ? 'بستن منو' : 'باز کردن منو');
+        });
+
+        function updateTableHeadersForMobile() {
+            document.querySelectorAll("table").forEach(table => {
+                const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.textContent);
+                table.querySelectorAll("tbody tr").forEach(row => {
+                    row.querySelectorAll("td").forEach((td, i) => {
+                        td.setAttribute("data-label", headers[i]);
+                    });
+                });
+            });
+        }
+        
+        // AI Mock Functionality
+        const qaInput = document.getElementById('qa-input');
+        const askAiButton = document.getElementById('ask-ai-button');
+        const qaAnswer = document.getElementById('qa-answer');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const scenarioInput = document.getElementById('scenario-input');
+        const analyzeScenarioButton = document.getElementById('analyze-scenario-button');
+        const scenarioAnalysisOutput = document.getElementById('scenario-analysis-output');
+        const scenarioLoadingIndicator = document.getElementById('scenario-loading-indicator');
+
+        const mockResponses = {
+            fa: {
+                "درآمد": "جریان‌های درآمدی اصلی ما شامل اشتراک‌های ماهانه خانواده (B2C)، قرارداد با شرکت‌های بیمه و کلینیک‌ها (B2B)، و کارمزد تراکنش‌ها برای خدماتی مانند حمل‌ونقل است.",
+                "رقبا": "مزیت اصلی ما در ارائه یک پلتفرم یکپارچه، چندکاناله (اپ، پیامک، تماس صوتی) و کاملاً متمرکز بر سالمندان است که هیچ رقیب دیگری در حال حاضر در بازار ایران و منطقه ارائه نمی‌دهد.",
+                "بازار": "بازار هدف اولیه ما سالمندان در ایران است که ارزشی بالغ بر ۶ میلیارد دلار دارد و به سرعت در حال رشد است. در فازهای بعدی، ما قصد ورود به بازار ۵۰۰ میلیارد دلاری MENA را داریم.",
+                "default": "این یک پاسخ نمایشی است. در نسخه واقعی، هوش مصنوعی ژیارا به سوال شما پاسخ خواهد داد."
+            },
+            en: {
+                "revenue": "Our main revenue streams include monthly family subscriptions (B2C), contracts with insurance companies and clinics (B2B), and transaction fees for services like transportation.",
+                "competitors": "Our key advantage is being the first integrated, multi-channel (app, SMS, voice), and senior-centric platform, which no other competitor currently offers in the Iranian and MENA markets.",
+                "market": "Our initial target market is seniors in Iran, valued at over $6 billion and growing rapidly. In later phases, we plan to enter the $500 billion MENA market.",
+                "default": "This is a demonstrative response. In the live version, Zheeyara's AI will answer your question."
+            }
+        };
+
+        function getMockResponse(input, lang, type) {
+            const lowerInput = input.toLowerCase();
+            const responses = mockResponses[lang];
+            for (const key in responses) {
+                if (key !== "default" && lowerInput.includes(key)) {
+                    return responses[key];
+                }
+            }
+            return responses.default;
+        }
+
+        async function handleAiQuery(button, input, output, loading, type) {
+            const userQuestion = input.value.trim();
+            if (!userQuestion) return;
+
+            loading.classList.remove('hidden');
+            button.disabled = true;
+            output.textContent = "";
+
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            output.textContent = getMockResponse(userQuestion, currentLang, type);
+            
+            loading.classList.add('hidden');
+            button.disabled = false;
+        }
+
+        askAiButton.addEventListener('click', () => handleAiQuery(askAiButton, qaInput, qaAnswer, loadingIndicator, 'qa'));
+        analyzeScenarioButton.addEventListener('click', () => handleAiQuery(analyzeScenarioButton, scenarioInput, scenarioAnalysisOutput, scenarioLoadingIndicator, 'scenario'));
+        
+        // Initial setup
+        updateContent(currentLang);
+    });
+    </script>
+</body>
+</html>
